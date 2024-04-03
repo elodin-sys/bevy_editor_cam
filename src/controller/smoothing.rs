@@ -72,7 +72,7 @@ impl<T: Copy + Default + Add<Output = T> + AddAssign<T> + Mul<f32, Output = T>> 
         let mut queue = VecDeque::default();
         for i in 1..Self::MAX_EVENTS {
             queue.push_back(InputStreamEntry {
-                time: start - interval.mul_f32(i as f32),
+                time: start.checked_sub(interval.mul_f32(i as f32)).unwrap_or_else(|| start),
                 sample: T::default(),
                 fraction_remaining: 1.0,
                 smoothed_value: T::default(),
